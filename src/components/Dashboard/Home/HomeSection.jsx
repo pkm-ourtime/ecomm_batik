@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { Link as ScrollLink } from 'react-scroll';
 import styles from '../../../styles/Style.module.css';
 
 const Home = () => {
@@ -12,8 +11,7 @@ const Home = () => {
         <p className="mb-8">Eksklusivitas Batik Modern dari <span className="font-bold">Melajoe Batik: <br />
           </span> Gaya Elegan yang Tidak Tertandingi</p>
         <div className="space-x-4">
-          <Link to="/katalog" className="bg-orange-500 px-6 py-3 rounded text-white">Beli</Link>
-          <ScrollLink to="layanan" smooth={true} duration={500} className={`bg-transparent border border-orange-500 px-6 py-3 rounded text-primary ${styles['scroll-link']}`}>Custom</ScrollLink>
+          <Link to="/login" className="bg-orange-500 px-6 py-3 rounded text-white">Beli</Link>
         </div>
       </div>
     </div>

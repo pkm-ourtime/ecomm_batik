@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { getProducts } from "../../services/ProductService";
-import { getProductCategory } from "../../services/ProductCategoryService";
+import { getProducts } from "../../../services/ProductService";
+import { getProductCategory } from "../../../services/ProductCategoryService";
 import toRupiah from "@develoka/angka-rupiah-js";
-import ProductModal from "./ProductModal";
+import ProductModal from "../ProductModal";
 
 const Katalog = () => {
   const [products, setProducts] = useState([]);

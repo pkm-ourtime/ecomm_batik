@@ -91,7 +91,7 @@ const Katalog = () => {
             terlihat menawan!
           </p>
           <button className="bg-white text-black px-4 py-2 rounded-full">
-            <Link to="/katalog" className="bg-white text-black px-4 py-2 rounded-full">
+            <Link to="/login" className="bg-white text-black px-4 py-2 rounded-full">
               Lihat Semua Produk...
             </Link>
           </button>

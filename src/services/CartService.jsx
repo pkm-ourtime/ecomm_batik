@@ -3,7 +3,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 export const getUserCart = async (userId) => {
   try {
-    const response = await axios.get(`${API_URL}/api/cart`, { params: { user_id: userId } });
+    const response = await axios.get(`${API_URL}/cart`, { params: { user_id: userId } });
     return response.data;
   } catch (error) {
     console.error('Error fetching cart:', error.message);
@@ -13,7 +13,7 @@ export const getUserCart = async (userId) => {
 
 export const addToCart = async (userId, productId, quantity) => {
     try {
-      const response = await axios.post(`${API_URL}/api/cart`, {
+      const response = await axios.post(`${API_URL}/cart`, {
         user_id: userId,
         product_id: productId,
         quantity: quantity,
@@ -27,7 +27,7 @@ export const addToCart = async (userId, productId, quantity) => {
 
   export const removeFromCart = async (cartId) => {
     try {
-      const response = await axios.delete(`${API_URL}/api/cart/${cartId}`);
+      const response = await axios.delete(`${API_URL}/cart/${cartId}`);
       return response.data;
     } catch (error) {
       console.error('Error deleting product:', error.message);
