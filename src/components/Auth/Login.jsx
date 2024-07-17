@@ -17,14 +17,20 @@ const Login = () => {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
       const username = decodedToken.username;
+      const userRole = decodedToken.role;
       
       console.log('User', username, 'logged in');
       
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
       localStorage.setItem('username', username);
+      localStorage.setItem('role', userRole);
 
-      navigate('/dashboard-admin');
+      if (userRole === 'admin') {
+        navigate('/dashboard-admin');
+      } else {
+        navigate('/dashboard');
+      }
 
     } catch (err) {
       console.error('Login failed: ', err.message);

@@ -1,4 +1,6 @@
+import React from 'react';
 import axios from 'axios';
+import { Navigate } from 'react-router-dom';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -31,9 +33,21 @@ export const register = async (username, email, password, role) => {
     }
 };
 
-
 export const logout = async () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     localStorage.removeItem('userId');
   };
+
+export const roleValidation = async (Component, allowedRoles) => {
+    return (props) => {
+        const role = localStorage.getItem('role');
+        console.log(role);
+
+        if (!allowedRoles.includes(role)) {
+            return <Navigate to="/unauthorized" />;
+        } else {
+            return <Component {...props} />;
+        }
+    }
+}
