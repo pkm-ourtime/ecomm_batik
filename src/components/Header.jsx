@@ -141,19 +141,13 @@ const Header = () => {
         >
           <ul className="flex space-x-8">
             <li className="group">
-              <button
-                className="text-white bg-red-900 px-5 py-2.5 flex hover:bg-orange-700 focus:outline-none font-medium text-sm rounded-lg"
-              >
-                <RouterLink to="/login">
-                Login
-                </RouterLink>
+              <button className="text-white bg-red-900 px-5 py-2.5 flex hover:bg-orange-700 focus:outline-none font-medium text-sm rounded-lg">
+                <RouterLink to="/login">Login</RouterLink>
               </button>
             </li>
             <li className="group">
-              <button
-                className="text-white py-2 flex group-hover:text-dark"
-              >
-                Register
+              <button className="text-white py-2 flex group-hover:text-dark">
+                <RouterLink to="/register">Register</RouterLink>
               </button>
             </li>
           </ul>

@@ -5,7 +5,6 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const login = async (email, password) => {
     try {
         const response = await axios.post(`${API_URL}/users/login`, { email, password });
-        localStorage.setItem('token', response.data.token);
 
         if (!response.data) {
             throw new Error('Login failed');
@@ -18,22 +17,14 @@ export const login = async (email, password) => {
     }
 };
 
-export const register = async (username, email, password, bio = null, hp = null, jenis_kelamin = null) => {
+export const register = async (username, email, password, role) => {
     try {
-        const payload = { username, email, password };
-
-        if (bio) payload.bio = bio;
-        if (hp) payload.hp = hp;
-        if (jenis_kelamin) payload.jenis_kelamin = jenis_kelamin;
-
-        const response = await axios.post(`${API_URL}/users/register`, payload);
+        const response = await axios.post(`${API_URL}/users/register`, {username, email, password, role});
 
         if (!response.data) {
             throw new Error('Registration failed');
         }
-
-        alert("Registration Successfull");
-        return response.data;
+        return response.data.token;
     } catch (err) {
         console.error('Error registering: ', err.message);
         throw err;
