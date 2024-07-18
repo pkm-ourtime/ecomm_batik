@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { login } from '../../services/AuthService';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -51,6 +52,9 @@ const Login = () => {
               <div className="w-full px-4 mb-8">
                 <label htmlFor="password" className="text-base text-primary font-bold">Password</label>
                 <input type="password" id="password" placeholder='***********' className="w-full bg-slate-200 text-dark p-3 rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary focus:bg-white" value={password} onChange={(e) => setPassword(e.target.value)} />
+              </div>
+              <div className="w-full px-4 mb-4">
+                 <p className='text-white'>Belum punya akun? <Link to='/register' className='text-blue-500' > Register </Link> </p> 
               </div>
               <div className="w-full px-4 mb-4">
                 <button className="text-base font-semibold text-white bg-primary py-3 px-8 rounded-full w-full hover:shadow-lg hover:opacity-80 transition duration-300 ease-in-out" type="submit">Login</button>

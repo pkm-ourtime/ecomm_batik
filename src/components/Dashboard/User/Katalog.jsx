@@ -3,6 +3,10 @@ import { getProducts } from "../../../services/ProductService";
 import { getProductCategory } from "../../../services/ProductCategoryService";
 import toRupiah from "@develoka/angka-rupiah-js";
 import ProductModal from "../ProductModal";
+import { logout } from '../../../services/AuthService';
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { addToCart } from "../../../services/CartService";
 
 const Katalog = () => {
   const [products, setProducts] = useState([]);
@@ -11,10 +15,16 @@ const Katalog = () => {
   const [error, setError] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [username, setUsername] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
     fetchCategories();
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
   }, []);
 
   const fetchProducts = async () => {
@@ -51,6 +61,16 @@ const Katalog = () => {
     return <p>Error: {error}</p>;
   }
 
+  const handleAddToCart = async (productId) => {
+    try {
+      await addToCart(productId, 1);
+      alert('Product added to cart');
+    } catch (error) {
+       console.error('Error adding to cart:', error.message);
+      alert('Failed to add product to cart');
+    }
+  };
+
   const openModal = (product) => {
     setSelectedProduct(product);
     setModalIsOpen(true);
@@ -61,36 +81,24 @@ const Katalog = () => {
     setSelectedProduct(null);
   };
 
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
+
   return (
     <div className="container">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-        <div className="flex justify-between items-center">
-          <div>
-          <a
-            class="inline-block rounded-full border border-orange-600 bg-orange-600 p-3 text-white hover:bg-transparent hover:text-white focus:outline-none focus:ring active:text-orange-500"
-            href="/"
-          >
-            <span class="sr-only"> Back </span>
-
-            <svg
-              class="size-5 transform rotate-180"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
-          </a>
-          </div>
+        <div className="w-full flex justify-between items-center mb-4" >
+          {username ? 
           <h2 className="text-4xl font-bold tracking-tight text-white">
-            Product Batik
-          </h2>
+            Welcome to Batik Store, {username}
+          </h2> : <p>Loading...</p> }
+          <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Logout</button>
+        </div>
+        <div>
+          <button className="bg-primary text-white px-4 py-2 rounded hover:bg-orange-600 mr-2"><Link to='cart-list'>Keranjang Saya</Link></button>
+          <button className="bg-primary text-white px-4 py-2 rounded hover:bg-orange-600"><Link to='wish-list'>Wishlist Saya</Link></button>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           {products.length > 0 ? (
@@ -124,15 +132,23 @@ const Katalog = () => {
                     {toRupiah(product.price).replace(",00", "")}
                   </p>
                 </div>
-                <div>
+                <div className="mb-2">
                   <a
                     href={product.external_link}
                     target="_blank"
                     rel="noreferrer"
-                    className="block w-full bg-primary hover:bg-orange-600 text-white font-bold py-2 rounded text-center"
+                    className="block w-full border border-orange-500 bg-white hover:border text-primary font-bold py-2 rounded text-center"
                   >
                     Beli Sekarang
                   </a>
+                </div>
+                <div>
+                  <button
+                    onClick={() => handleAddToCart(product._id)}
+                    className="block w-full bg-primary hover:bg-orange-600 text-white font-bold py-2 rounded text-center"
+                  >
+                    + Keranjang
+                  </button>
                 </div>
               </div>
             ))

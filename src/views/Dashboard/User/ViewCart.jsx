@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import UserCartList from '../../../components/Dashboard/User/CartList';
+import CartList from '../../../components/Dashboard/User/CartList';
 
 const ViewCart = () => {
   return (
@@ -8,7 +8,7 @@ const ViewCart = () => {
       <Helmet>
         <title>All Cart</title>
       </Helmet>
-      <UserCartList />
+      <CartList />
     </div>
   );
 };
