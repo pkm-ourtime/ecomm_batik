@@ -15,7 +15,6 @@ const AddProductForm = ({ onClose }) => {
     const [externalLink, setExternalLink] = useState('');
     const navigate = useNavigate();
     const [file, setFile] = useState(null);
-    const API_URL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         fetchCategories();
@@ -41,7 +40,7 @@ const AddProductForm = ({ onClose }) => {
                 const imageData = new FormData();
                 imageData.append('file', file);
                 const response = await uploadFile(imageData);
-                imageURL = (`${API_URL}${response.filePath}`);
+                imageURL = (`${response.filePath}`);
             }
 
             const productData = {
@@ -49,7 +48,7 @@ const AddProductForm = ({ onClose }) => {
                 description,
                 price,
                 image_url: imageURL,
-                category_id: categoryId || null,
+                category: categoryId || null,
                 external_link: externalLink,
             };
             await addProduct(productData);

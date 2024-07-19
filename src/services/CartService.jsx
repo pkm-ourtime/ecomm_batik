@@ -37,8 +37,15 @@ export const getCartItems = async () => {
 export const updateCartItem = async (cartItemId, quantity) => {
   try {
     const token = getAuthToken();
-    const response = await axios.put(`${API_URL}/${cartItemId}`, { quantity },
-      { headers: { Authorization: `Bearer ${token}`} }
+    const response = await axios.put(
+      `${API_URL}/cart/${cartItemId}`,
+      { quantity },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return response.data;
   } catch (error) {

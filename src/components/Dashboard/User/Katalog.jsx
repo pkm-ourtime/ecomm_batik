@@ -7,6 +7,7 @@ import { logout } from '../../../services/AuthService';
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { addToCart } from "../../../services/CartService";
+import { addProductToWishlist } from "../../../services/WishService"
 
 const Katalog = () => {
   const [products, setProducts] = useState([]);
@@ -71,6 +72,16 @@ const Katalog = () => {
     }
   };
 
+  const handleAddToWishlist = async (productId) => {
+    try {
+      await addProductToWishlist(productId);
+      alert('Product added to wishlist');
+    } catch (error) {
+      console.error("Error adding product to wishlist", error.message);
+      alert('Failed to add product to wishlist');
+    }
+  };
+
   const openModal = (product) => {
     setSelectedProduct(product);
     setModalIsOpen(true);
@@ -107,6 +118,11 @@ const Katalog = () => {
                 key={index}
                 className="group relative  max-w-sm bg-white p-4 rounded overflow-hidden shadow-md"
               >
+                <div className="absolute top-4  left-4 z-10">
+                  <button onClick={() => handleAddToWishlist(product._id)} className="text-red-500 hover:text-red-700 text-xl">
+                    <i className="fas fa-heart"></i>
+                  </button>
+                </div>
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                   <img
                     src={product.image_url}
@@ -125,7 +141,7 @@ const Katalog = () => {
                     {`Category: `}
                     <br />
                     <p className="text-primary">
-                      {getCategoryName(product.category_id)}
+                      {getCategoryName(product.category)}
                     </p>
                   </p>
                   <p className="text-base text-primary mb-4">

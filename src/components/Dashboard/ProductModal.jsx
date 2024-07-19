@@ -59,7 +59,7 @@ const ProductModal = ({ isOpen, onClose, product }) => {
               {product.name}
             </h2>
             <p className="text-gray-400">{product.description}</p>
-            <p className="text-white">Category: {getCategoryName(product.category_id)}</p>
+            <p className="text-white">Category: {getCategoryName(product.category)}</p>
             <p className="text-white">Price: {toRupiah(product.price).replace(",00", "")}</p>
           </div>
         </div>
