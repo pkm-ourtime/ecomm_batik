@@ -78,7 +78,7 @@ const ProductList = () => {
   };
 
   const filteredProducts = selectedCategory
-    ? products.filter(product => product.category_id === selectedCategory)
+    ? products.filter(product => product.category === selectedCategory)
     : products;
 
   if (loading) {
@@ -115,7 +115,7 @@ const ProductList = () => {
               <h3 className="text-lg font-semibold">{product.name}</h3>
               <p className="text-gray-600">{product.description}</p>
               <p className="text-gray-500">{`Category: `}<br/>
-                <span className="text-primary cursor-pointer" onClick={() => handleCategoryClick(product.category_id)}>{getCategoryName(product.category_id)}</span>
+                <span className="text-primary cursor-pointer" onClick={() => handleCategoryClick(product.category)}>{getCategoryName(product.category)}</span>
               </p>
               <p className="text-gray-700 font-bold">Price: {toRupiah(product.price, { floatingPoint: 0 })}</p>
             </div>

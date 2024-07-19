@@ -24,8 +24,8 @@ const EditProductForm = () => {
       const product = await getProductById(id);
       setName(product.name);
       setDescription(product.description);
-      setPrice(product.price.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }).replace(".00", ""));
-      setCategoryId(product.category_id !== null ? product.category_id.toString() : ''); 
+      setPrice(product.price);
+      setCategoryId(product.category !== null ? product.category.toString() : ''); 
       setLoading(false);
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -47,7 +47,7 @@ const EditProductForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateProduct(id, { name, description, price, category_id: categoryId });
+      await updateProduct(id, { name, description, price, category: categoryId });
       navigate('/dashboard-admin'); 
     } catch (error) {
       console.error('Error updating product:', error);
