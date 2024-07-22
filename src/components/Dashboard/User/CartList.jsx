@@ -5,15 +5,18 @@ import {
   updateCartItem,
   deleteCartItem,
 } from "../../../services/CartService";
+import { checkOutFromCart } from "../../../services/OrderService";
 
 const Cartlist = () => {
   const [cartItems, setCartItems] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
         const items = await getCartItems();
         setCartItems(items);
+        calculateTotalAmount(items);
       } catch (error) {
         console.error("Error fetching cart items:", error.message);
       }
@@ -22,19 +25,26 @@ const Cartlist = () => {
     fetchCartItems();
   }, []);
 
+  const calculateTotalAmount = (items) => {
+    const total = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    setTotalAmount(total);
+  };
+
   const handleUpdateQuantity = async (id, quantity) => {
     try {
         if (quantity < 1) {
           await deleteCartItem(id);
-          setCartItems(cartItems.filter((item) => item._id !== id));
+          const updatedCartItems = cartItems.filter((item) => item._id !== id);
+          setCartItems(updatedCartItems);
+          calculateTotalAmount(updatedCartItems);    
         } else {
           const updateItem = await updateCartItem(id, quantity);
           console.log("Updated item:", updateItem);
-          setCartItems(
-            cartItems.map(item => item._id === id
-                ? { ...item, quantity: updateItem.quantity }
-                : item
-          ));
+          const updatedCartItems = cartItems.map(item =>
+            item._id === id ? { ...item, quantity: updateItem.quantity } : item
+          );
+          setCartItems(updatedCartItems);
+          calculateTotalAmount(updatedCartItems);
         }
     } catch (error) {
       console.error("Error updating cart item:", error.message);
@@ -44,11 +54,24 @@ const Cartlist = () => {
   const handleDeleteItem = async (id) => {
     try {
       await deleteCartItem(id);
-      setCartItems(cartItems.filter((item) => item._id !== id));
+      const updateCartItems = cartItems.filter((item) => item._id !== id);
+      setCartItems(updateCartItems);
+      calculateTotalAmount(updateCartItems);
     } catch (error) {
       console.error("Error deleting cart item:", error.message);
     }
   };
+
+  const handleCheckOut = async () => {
+    try {
+      await checkOutFromCart();
+      alert('Checkout successful!');
+      setCartItems([]);
+      setTotalAmount(0);
+    } catch (error) {
+      console.error('Failed to check out', error.message);
+    }
+  }
 
   return (
     <div className="container">
@@ -74,7 +97,7 @@ const Cartlist = () => {
             </tr>
           </thead>
           <tbody>
-            {cartItems.map((item) => (
+            {Array.isArray(cartItems) && cartItems.map((item) => (
               <tr
                 key={item._id}
                 class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
@@ -85,16 +108,16 @@ const Cartlist = () => {
                 >
                   {item.product.name}
                 </th>
-                <td class="px-6 py-4">{item.quantity}</td>
-                <td class="px-6 py-4 text-center">
-                  <button
-                    className="bg-white rounded-l-lg px-2 mr-1 text-black"
+                <td class="px-6 py-4">
+                <button
+                    className="bg-white rounded-l-lg px-2 text-black"
                     onClick={() =>
                       handleUpdateQuantity(item._id, item.quantity + 1)
                     }
                   >
                     +
                   </button>
+                  <input className="w-7 text-center" type="number" value={item.quantity} readOnly />
                   <button
                     className="bg-white rounded-r-lg px-2 text-black"
                     onClick={() =>
@@ -103,6 +126,9 @@ const Cartlist = () => {
                   >
                     -
                   </button>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  
                   <button
                     className="text-red-500 ml-2"
                     onClick={() => handleDeleteItem(item._id)}
@@ -113,6 +139,19 @@ const Cartlist = () => {
               </tr>
             ))}
           </tbody>
+          <tfoot>
+            <tr>
+              <td>
+                Total Amount:
+              </td>
+              <td>{totalAmount}</td>
+              <td>
+                <button onClick={handleCheckOut}>
+                  Check Out
+                </button>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>

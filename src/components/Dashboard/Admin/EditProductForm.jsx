@@ -84,7 +84,7 @@ const EditProductForm = () => {
             <label htmlFor="productCategory" className="text-base text-primary font-bold">Category:</label>
             <select id="productCategory" className="w-full bg-gray-200 text-gray-700 p-3 rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary focus:bg-white" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
               {categories.map(category => (
-                <option key={category.id} value={category.id}>{category.name}</option>
+                <option key={category._id} value={category._id}>{category.name}</option>
               ))}
             </select>
           </div>
