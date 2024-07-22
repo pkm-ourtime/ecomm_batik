@@ -34,7 +34,7 @@ const Cartlist = () => {
     try {
         if (quantity < 1) {
           await deleteCartItem(id);
-          const updatedCartItems = cartItems.filter((item) => item._id !== id);
+          const updatedCartItems = await getCartItems();
           setCartItems(updatedCartItems);
           calculateTotalAmount(updatedCartItems);    
         } else {
@@ -54,7 +54,7 @@ const Cartlist = () => {
   const handleDeleteItem = async (id) => {
     try {
       await deleteCartItem(id);
-      const updateCartItems = cartItems.filter((item) => item._id !== id);
+      const updateCartItems = await getCartItems();
       setCartItems(updateCartItems);
       calculateTotalAmount(updateCartItems);
     } catch (error) {
