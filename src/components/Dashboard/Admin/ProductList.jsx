@@ -106,6 +106,9 @@ const ProductList = () => {
       </div>
       <div className="flex mb-4">
         <button onClick={() => setIsModalOpen(true)} className="bg-primary text-white px-4 py-2 mr-2 rounded hover:bg-orange-600">Add Product</button>
+        <button className="bg-primary text-white px-4 py-2 mr-2 rounded hover:bg-orange-600">
+          <Link to="manage-order" >Manage Order</Link>
+        </button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {filteredProducts.map((product) => (

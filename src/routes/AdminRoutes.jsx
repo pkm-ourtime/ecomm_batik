@@ -5,6 +5,7 @@ import EditProductPage from '../views/Dashboard/Admin/EditProductPage';
 import AddProductPage from '../views/Dashboard/Admin/AddProductPage';
 import AddProductCategoryPage from '../views/Dashboard/Admin/AddProductCategoryPage';
 import PrivateRoute from '../services/PrivateRoute';
+import ManageOrderPage from '../views/Dashboard/Admin/ManageOrderPage';
 
 const AdminRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const AdminRoutes = () => {
       <Route path="add-product" element={<PrivateRoute element={AddProductPage} roles={['admin']} />} />
       <Route path="edit-product/:id" element={<PrivateRoute element={EditProductPage} roles={['admin']} />} />
       <Route path="add-product-category" element={<PrivateRoute element={AddProductCategoryPage} roles={['admin']} />} />
+      <Route path="manage-order" element={<PrivateRoute element={ManageOrderPage} roles={['admin']} />} />
     </Routes>
   );
 };

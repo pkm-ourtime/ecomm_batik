@@ -33,7 +33,7 @@ export const getWishList = async () => {
 export const removeProductFromWishList = async (productId) => {
     try {
         const token = getAuthToken();
-        const response = await axios.delete(`${API_URL}/wishlist`, { productId },
+        const response = await axios.delete(`${API_URL}/wishlist/${ productId }`,
             { headers: {Authorization: `Bearer ${token}` } }
         );
         return response.data;

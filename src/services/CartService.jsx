@@ -27,7 +27,13 @@ export const getCartItems = async () => {
     const response = await axios.get(`${API_URL}/cart`,
       { headers: { Authorization: `Bearer ${token}`} }
     );
-    return response.data;
+    
+    if (Array.isArray(response.data)) {
+      return response.data;
+    } else {
+      console.error('Unexpected response format:', response.data);
+      throw new Error('Unexpected response format');
+    }
   } catch (error) {
     console.error("Error getting cart item:", error.message);
     throw error;

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import toRupiah from "@develoka/angka-rupiah-js";
 import { getProductCategory } from "../../services/ProductCategoryService";
+import ReviewUser from "../Dashboard/User/ReviewUser";
 
 const ProductModal = ({ isOpen, onClose, product }) => {
   const [categories, setCategories] = useState([]);
+  const [showReviewForm, setShowReviewForm] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -61,6 +63,17 @@ const ProductModal = ({ isOpen, onClose, product }) => {
             <p className="text-gray-400">{product.description}</p>
             <p className="text-white">Category: {getCategoryName(product.category)}</p>
             <p className="text-white">Price: {toRupiah(product.price).replace(",00", "")}</p>
+            <button 
+              onClick={() => setShowReviewForm(true)}
+              className="mt-4 bg-primary text-white px-4 py-2 rounded"
+            >
+              Add Review
+            </button>
+            {showReviewForm && (
+              <div className="mt-4">
+                <ReviewUser productId={product._id} />
+              </div>
+            )}
           </div>
         </div>
       </div>
