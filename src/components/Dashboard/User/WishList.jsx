@@ -37,7 +37,7 @@ const WishList = () => {
         <button className="rounded full bg-red-500 p-1">
             <Link to="/dashboard">Back</Link>
         </button>
-        <h2 className="text-center">My Wishlist</h2>
+        <h2 className="text-center text-3xl font-bold">My Wishlist</h2>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           {wishlist.map((product) => (

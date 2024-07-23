@@ -6,6 +6,7 @@ import {
   deleteCartItem,
 } from "../../../services/CartService";
 import { checkOutFromCart } from "../../../services/OrderService";
+import toRupiah from '@develoka/angka-rupiah-js'
 
 const Cartlist = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -80,7 +81,7 @@ const Cartlist = () => {
         <button className="rounded full bg-red-500 p-1">
             <Link to="/dashboard">Back</Link>
         </button>
-        <h2 className="text-center">My Cart</h2>
+        <h2 className="text-center text-3xl font-bold">My Cart</h2>
         </div>
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -141,12 +142,12 @@ const Cartlist = () => {
           </tbody>
           <tfoot>
             <tr>
-              <td>
+              <td className="text-center">
                 Total Amount:
               </td>
-              <td>{totalAmount}</td>
-              <td>
-                <button onClick={handleCheckOut}>
+              <td>{toRupiah(totalAmount).replace(",00", "")}</td>
+              <td >
+                <button className="rounded-full bg-blue-500 text-black p-1 my-1" onClick={handleCheckOut}>
                   Check Out
                 </button>
               </td>

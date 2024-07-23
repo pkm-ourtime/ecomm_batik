@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { addToCart } from "../../../services/CartService";
 import { addProductToWishlist } from "../../../services/WishService"
+import { buyNow } from "../../../services/OrderService";
 
 const Katalog = () => {
   const [products, setProducts] = useState([]);
@@ -82,6 +83,16 @@ const Katalog = () => {
     }
   };
 
+  const handleBuyNow = async (productId) => {
+    try {
+      await buyNow(productId, 1);
+      alert('Purchase successful!');
+    } catch (error) {
+      console.error("Error purchasing product", error.message);
+      alert('Failed to purchase product');
+    }
+  };
+
   const openModal = (product) => {
     setSelectedProduct(product);
     setModalIsOpen(true);
@@ -109,7 +120,8 @@ const Katalog = () => {
         </div>
         <div>
           <button className="bg-primary text-white px-4 py-2 rounded hover:bg-orange-600 mr-2"><Link to='cart-list'>Keranjang Saya</Link></button>
-          <button className="bg-primary text-white px-4 py-2 rounded hover:bg-orange-600"><Link to='wish-list'>Wishlist Saya</Link></button>
+          <button className="bg-primary text-white px-4 py-2 rounded hover:bg-orange-600 mr-2"><Link to='wish-list'>Wishlist Saya</Link></button>
+          <button className="bg-primary text-white px-4 py-2 rounded hover:bg-orange-600"><Link to='order-list'>Pesanan Saya</Link></button>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           {products.length > 0 ? (
@@ -149,14 +161,12 @@ const Katalog = () => {
                   </p>
                 </div>
                 <div className="mb-2">
-                  <a
-                    href={product.external_link}
-                    target="_blank"
-                    rel="noreferrer"
+                  <button
+                    onClick={() => handleBuyNow(product._id)}
                     className="block w-full border border-orange-500 bg-white hover:border text-primary font-bold py-2 rounded text-center"
                   >
                     Beli Sekarang
-                  </a>
+                  </button>
                 </div>
                 <div>
                   <button
