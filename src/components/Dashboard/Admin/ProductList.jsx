@@ -6,6 +6,9 @@ import { getProductCategory } from '../../../services/ProductCategoryService';
 import { logout } from '../../../services/AuthService';
 import AddProductForm from './AddProductForm';
 import { deleteFile } from '../../../services/FileService';
+import { EditProductForm } from './EditProductForm';
+import Loading from '../../Loading';
+import AddProductCategoryForm from './AddProductCategoryForm';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -14,6 +17,8 @@ const ProductList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [isCatModalOpen, setIsCatModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,7 +53,7 @@ const ProductList = () => {
     const parseUrl = imageUrl.split('/');
     const imageName = parseUrl[parseUrl.length - 1];
     const encodedImageName = encodeURIComponent(imageName);
-    
+
     try {
       await deleteFile(encodedImageName);
       await deleteProduct(productData._id);
@@ -72,6 +77,23 @@ const ProductList = () => {
     return category ? category.name : 'Unknown';
   };
 
+  const openEditModal = (productId) => {
+    setSelectedProductId(productId);
+  };
+
+  const closeEditModal = () => {
+    setSelectedProductId(null);
+  };
+
+  const openCatModal = () => {
+    setIsCatModalOpen(true);
+  };
+
+  const closeCatModal = () => {
+    setIsCatModalOpen(false);
+  };
+
+
   const handleLogout = async () => {
     await logout();
     navigate('/login');
@@ -82,7 +104,7 @@ const ProductList = () => {
     : products;
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (error) {
@@ -106,8 +128,9 @@ const ProductList = () => {
       </div>
       <div className="flex mb-4">
         <button onClick={() => setIsModalOpen(true)} className="bg-primary text-white px-4 py-2 mr-2 rounded hover:bg-orange-600">Add Product</button>
+        <button onClick={openCatModal} className="bg-primary text-white px-4 py-2 mr-2 rounded hover:bg-orange-600">Add Product Category</button>
         <button className="bg-primary text-white px-4 py-2 mr-2 rounded hover:bg-orange-600">
-          <Link to="manage-order" >Manage Order</Link>
+          <Link to="manage-order">Manage Order</Link>
         </button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -123,7 +146,7 @@ const ProductList = () => {
               <p className="text-gray-700 font-bold">Price: {toRupiah(product.price, { floatingPoint: 0 })}</p>
             </div>
             <div className="mt-4 flex">
-              <Link to={`/dashboard-admin/edit-product/${product._id}`} className="bg-primary text-center text-white px-4 py-2 rounded mr-2 hover:bg-orange-600 flex-grow">Edit</Link>
+              <button onClick={() => openEditModal(product._id)} className="bg-primary text-center text-white px-4 py-2 rounded mr-2 hover:bg-orange-600 flex-grow">Edit</button>
               <button onClick={() => handleDelete(product)} className="bg-red-500 text-center text-white px-4 py-2 rounded hover:bg-red-600 flex-grow">Delete</button>
             </div>
           </div>
@@ -131,12 +154,17 @@ const ProductList = () => {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="border border-orange-500 rounded-lg shadow-lg max-w-2xl w-full">
-            <AddProductForm onClose={() => setIsModalOpen(false)} />
-          </div>
-        </div>
+        <AddProductForm onClose={() => setIsModalOpen(false)} />
       )}
+
+      {selectedProductId && (
+        <EditProductForm productId={selectedProductId} isOpen={true} onRequestClose={closeEditModal} />
+      )}
+
+      {isCatModalOpen && (
+        <AddProductCategoryForm isOpen={isCatModalOpen} onClose={closeCatModal} />
+      )}
+
     </div>
   );
 };

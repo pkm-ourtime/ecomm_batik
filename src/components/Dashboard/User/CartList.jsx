@@ -33,20 +33,19 @@ const Cartlist = () => {
 
   const handleUpdateQuantity = async (id, quantity) => {
     try {
-        if (quantity < 1) {
-          await deleteCartItem(id);
-          const updatedCartItems = await getCartItems();
-          setCartItems(updatedCartItems);
-          calculateTotalAmount(updatedCartItems);    
-        } else {
-          const updateItem = await updateCartItem(id, quantity);
-          console.log("Updated item:", updateItem);
-          const updatedCartItems = cartItems.map(item =>
-            item._id === id ? { ...item, quantity: updateItem.quantity } : item
-          );
-          setCartItems(updatedCartItems);
-          calculateTotalAmount(updatedCartItems);
-        }
+      if (quantity < 1) {
+        await deleteCartItem(id);
+        const updatedCartItems = await getCartItems();
+        setCartItems(updatedCartItems);
+        calculateTotalAmount(updatedCartItems);
+      } else {
+        const updateItem = await updateCartItem(id, quantity);
+        const updatedCartItems = cartItems.map(item =>
+          item._id === id ? { ...item, quantity: updateItem.quantity } : item
+        );
+        setCartItems(updatedCartItems);
+        calculateTotalAmount(updatedCartItems);
+      }
     } catch (error) {
       console.error("Error updating cart item:", error.message);
     }
@@ -55,9 +54,9 @@ const Cartlist = () => {
   const handleDeleteItem = async (id) => {
     try {
       await deleteCartItem(id);
-      const updateCartItems = await getCartItems();
-      setCartItems(updateCartItems);
-      calculateTotalAmount(updateCartItems);
+      const updatedCartItems = await getCartItems();
+      setCartItems(updatedCartItems);
+      calculateTotalAmount(updatedCartItems);
     } catch (error) {
       console.error("Error deleting cart item:", error.message);
     }
@@ -72,66 +71,55 @@ const Cartlist = () => {
     } catch (error) {
       console.error('Failed to check out', error.message);
     }
-  }
+  };
 
   return (
-    <div className="container">
-      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div className="flex justify-between items-center my-2">
-        <button className="rounded full bg-red-500 p-1">
+    <div className="container mx-auto p-4">
+      <div className="relative overflow-x-auto shadow-lg sm:rounded-lg bg-dark text-white">
+        <div className="flex justify-between items-center p-4 bg-gray-800 rounded-t-lg">
+          <button className="bg-primary text-white py-2 px-4 rounded-full hover:bg-primary-dark">
             <Link to="/dashboard">Back</Link>
-        </button>
-        <h2 className="text-center text-3xl font-bold">My Cart</h2>
+          </button>
+          <h2 className="text-center text-3xl font-bold text-primary">My Cart</h2>
+          <div></div>
         </div>
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left text-gray-300 bg-gray-900">
+          <thead className="text-xs text-gray-400 uppercase bg-gray-800">
             <tr>
-              <th scope="col" class="px-6 py-3">
-                Product name
-              </th>
-              <th scope="col" class="px-6 py-3">
-                Quantity
-              </th>
-              <th scope="col" class="px-6 py-3 text-center">
-                Action
-              </th>
+              <th className="px-6 py-3">Product Name</th>
+              <th className="px-6 py-3">Quantity</th>
+              <th className="px-6 py-3 text-center">Action</th>
             </tr>
           </thead>
           <tbody>
             {Array.isArray(cartItems) && cartItems.map((item) => (
-              <tr
-                key={item._id}
-                class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
-              >
-                <th
-                  scope="row"
-                  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  {item.product.name}
-                </th>
-                <td class="px-6 py-4">
-                <button
-                    className="bg-white rounded-l-lg px-2 text-black"
-                    onClick={() =>
-                      handleUpdateQuantity(item._id, item.quantity + 1)
-                    }
-                  >
-                    +
-                  </button>
-                  <input className="w-7 text-center" type="number" value={item.quantity} readOnly />
-                  <button
-                    className="bg-white rounded-r-lg px-2 text-black"
-                    onClick={() =>
-                      handleUpdateQuantity(item._id, item.quantity - 1)
-                    }
-                  >
-                    -
-                  </button>
+              <tr key={item._id} className="border-b border-gray-700">
+                <td className="px-6 py-4">{item.product.name}</td>
+                <td className="px-6 py-4">
+                  <div className="">
+                    <button
+                      className="bg-primary text-white rounded-r-lg px-3 py-1 hover:bg-primary-dark"
+                      onClick={() => handleUpdateQuantity(item._id, item.quantity - 1)}
+                    >
+                      -
+                    </button>
+                    <input
+                      className="w-20 text-center bg-gray-700 text-gray-300 border border-gray-600"
+                      type="number"
+                      value={item.quantity}
+                      readOnly
+                    />
+                    <button
+                      className="bg-primary text-white rounded-l-lg px-3 py-1 hover:bg-primary-dark"
+                      onClick={() => handleUpdateQuantity(item._id, item.quantity + 1)}
+                    >
+                      +
+                    </button>
+                  </div>
                 </td>
-                <td class="px-6 py-4 text-center">
-                  
+                <td className="px-6 py-4 text-center">
                   <button
-                    className="text-red-500 ml-2"
+                    className="text-red-500 hover:text-red-700"
                     onClick={() => handleDeleteItem(item._id)}
                   >
                     Delete
@@ -140,14 +128,15 @@ const Cartlist = () => {
               </tr>
             ))}
           </tbody>
-          <tfoot>
+          <tfoot className="bg-gray-800 text-gray-300">
             <tr>
-              <td className="text-center">
-                Total Amount:
-              </td>
-              <td>{toRupiah(totalAmount).replace(",00", "")}</td>
-              <td >
-                <button className="rounded-full bg-blue-500 text-black p-1 my-1" onClick={handleCheckOut}>
+              <td className="text-center px-6 py-4 font-bold">Total Amount:</td>
+              <td className="px-6 py-4 font-bold">{toRupiah(totalAmount).replace(",00", "")}</td>
+              <td className="px-6 py-4 text-center">
+                <button
+                  className="bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600"
+                  onClick={handleCheckOut}
+                >
                   Check Out
                 </button>
               </td>

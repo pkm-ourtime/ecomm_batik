@@ -31,21 +31,22 @@ const WishList = () => {
   };
 
   return (
-    <div className="container">
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-      <div className="flex justify-between items-center my-2">
-        <button className="rounded full bg-red-500 p-1">
+    <div className="container mx-auto p-4">
+      <div className="text-white rounded-lg shadow-lg p-6">
+        <div className="flex justify-between items-center mb-6">
+          <button className="bg-primary text-white py-2 px-4 rounded-full hover:bg-primary-dark transition">
             <Link to="/dashboard">Back</Link>
-        </button>
-        <h2 className="text-center text-3xl font-bold">My Wishlist</h2>
+          </button>
+          <h2 className="text-center text-3xl font-bold">My Wishlist</h2>
+          <div></div>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           {wishlist.map((product) => (
             <div
               key={product._id}
-              className="group relative  max-w-sm bg-orange-500 p-4 rounded overflow-hidden shadow-md"
+              className="relative bg-dark text-white p-4 rounded-lg overflow-hidden shadow-lg transition transform hover:scale-105"
             >
-              <div className="absolute top-4  left-4 z-10">
+              <div className="absolute top-4 left-4 z-10">
                 <button
                   onClick={() => handleRemoveFromWishlist(product._id)}
                   className="text-red-500 hover:text-white text-xl"
@@ -53,18 +54,18 @@ const WishList = () => {
                   <i className="fas fa-heart"></i>
                 </button>
               </div>
-              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+              <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-800 group-hover:opacity-75 lg:h-80">
                 <img
                   src={product.image_url}
                   alt={product.name}
-                  className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                  className="h-full w-full object-cover object-center"
                 />
               </div>
               <div className="px-2 py-2">
-                <h2 className="text-black text-lg font-bold uppercase">
+                <h2 className="text-primary text-lg font-bold uppercase">
                   {product.name}
                 </h2>
-                <p className="text-xs text-gray-600">{product.description}</p>
+                <p className="text-sm text-gray-400">{product.description}</p>
               </div>
             </div>
           ))}

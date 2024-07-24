@@ -42,7 +42,6 @@ export const logout = async () => {
 export const roleValidation = async (Component, allowedRoles) => {
     return (props) => {
         const role = localStorage.getItem('role');
-        console.log(role);
 
         if (!allowedRoles.includes(role)) {
             return <Navigate to="/unauthorized" />;
