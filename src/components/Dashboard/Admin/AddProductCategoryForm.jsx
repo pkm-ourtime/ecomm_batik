@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createProductCategory } from '../../../services/ProductCategoryService';
+import Loading from '../../Loading';
 
-const AddProductCategoryForm = () => {
+const AddProductCategoryForm = ({ isOpen, onClose }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState(null);
@@ -10,7 +11,6 @@ const AddProductCategoryForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Set loading to false after the component has mounted
     setLoading(false);
   }, []);
 
@@ -19,6 +19,7 @@ const AddProductCategoryForm = () => {
     setLoading(true);
     try {
       await createProductCategory({ name, description });
+      onClose();
       navigate('/dashboard-admin');
     } catch (error) {
       console.error('Error adding product category:', error);
@@ -28,45 +29,65 @@ const AddProductCategoryForm = () => {
     }
   };
 
+  if (!isOpen) {
+    return null;
+  }
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
-    <div className="mt-36 max-w-lg my-10 border border-gray-200 rounded-xl mx-auto p-5 shadow-md font-serif group">
-      <h2 className="font-bold text-center text-gray-700 text-lg mb-3">Add Product Category</h2>
-      {loading && <div>Loading...</div>}
-      {error && <div className="text-red-500">{error}</div>}
-      {!loading && !error && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-dark p-8 rounded-lg relative max-w-lg w-full">
+        <button
+          onClick={onClose}
+          className="text-primary absolute top-4 right-4 hover:text-gray-500 focus:outline-none"
+        >
+          &times;
+        </button>
+        <h2 className="font-bold text-center text-primary text-3xl mb-6">
+          Add Product Category
+        </h2>
+        {error && <div className="text-red-500 mb-4">{error}</div>}
         <form id="addProductCategoryForm" onSubmit={handleSubmit}>
-          <div className="w-full lg:w-2/3 lg:mx-auto">
-            <div className="w-full px-4 mb-8">
-              <label htmlFor="categoryName" className="text-base text-primary font-bold">Name:</label>
-              <input
-                type="text"
-                id="categoryName"
-                className="w-full bg-gray-200 text-gray-700 p-3 rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary focus:bg-white"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div className="w-full px-4 mb-8">
-              <label htmlFor="categoryDescription" className="text-base text-primary font-bold">Description:</label>
-              <input
-                type="text"
-                id="categoryDescription"
-                className="w-full bg-gray-200 text-gray-700 p-3 rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary focus:bg-white"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
-            <div className="w-full px-4 mb-4">
-              <button
-                className="text-base font-semibold text-white bg-primary py-3 px-8 rounded-full w-full hover:shadow-lg hover:opacity-80 transition duration-300 ease-in-out"
-                type="submit"
-              >
-                Add Category
-              </button>
-            </div>
+          <div className="mb-4">
+            <label htmlFor="categoryName" className="block text-base text-primary font-bold mb-2">Name:</label>
+            <input
+              type="text"
+              id="categoryName"
+              className="w-full bg-gray-200 text-primary p-3 rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary focus:bg-white"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="categoryDescription" className="block text-base text-primary font-bold mb-2">Description:</label>
+            <input
+              type="text"
+              id="categoryDescription"
+              className="w-full bg-gray-200 text-primary p-3 rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary focus:bg-white"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+          <div className="flex justify-between">
+            <button
+              type="button"
+              onClick={onClose}
+              className="font-semibold text-white bg-red-500 py-2 px-4 rounded-full hover:shadow-lg hover:opacity-80 transition duration-300 ease-in-out"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              className="font-semibold text-white bg-green-500 py-2 px-4 rounded-full hover:shadow-lg hover:opacity-80 transition duration-300 ease-in-out"
+            >
+              Add Category
+            </button>
           </div>
         </form>
-      )}
+      </div>
     </div>
   );
 };

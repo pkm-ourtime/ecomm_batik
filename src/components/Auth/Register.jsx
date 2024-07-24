@@ -21,8 +21,6 @@ const Register = () => {
       const decodedUsername = decodedToken.username;
       const userRole = decodedToken.role;
 
-      console.log('User', decodedUsername, 'registered');
-
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
       localStorage.setItem('username', decodedUsername);

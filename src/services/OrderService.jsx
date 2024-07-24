@@ -8,7 +8,6 @@ const getAuthToken = () => {
 export const checkOutFromCart = async () => {
     try {
         const token = getAuthToken();
-        console.log(token)
         const response = await axios.post(`${API_URL}/order`, {} ,{
             headers: { Authorization: `Bearer ${token}` } 
         });
@@ -38,7 +37,7 @@ export const getOrder = async () => {
         const response = await axios.get(`${API_URL}/order`,
             { headers: {Authorization: `Bearer ${token}`} }
         );
-        console.log(response.data)
+
         return response.data;
     } catch (error) {
         console.error('Failed to get order', error.message);

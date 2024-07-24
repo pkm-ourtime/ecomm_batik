@@ -20,8 +20,6 @@ const Login = () => {
       const username = decodedToken.username;
       const userRole = decodedToken.role;
       
-      console.log('User', username, 'logged in');
-      
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
       localStorage.setItem('username', username);
