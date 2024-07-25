@@ -49,7 +49,7 @@ const AddProductForm = ({ onClose }) => {
         description,
         price,
         image_url: imageURL,
-        category_id: categoryId || null,
+        category: categoryId || null,
         external_link: externalLink,
       };
       await addProduct(productData);
